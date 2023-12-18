@@ -1,0 +1,1 @@
+In efforts to learn Python over this winter break I discovered the Advent of Code. I have decided to do these challenges in python, all under this repository to help develop my skills and show my progress along the way!
