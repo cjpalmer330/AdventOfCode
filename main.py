@@ -1,71 +1,37 @@
 import fileinput
 
-maxRed, maxBlue, maxGreen = 12, 14, 13
-validIDs = []
-powerSum = 0
-for bagLine in fileinput.input(files='adventDay2Input.txt', encoding='utf-8'):
+points, lineNum = 0, 0
+for drawLine in fileinput.input(files='adventDay4Input.txt', encoding='utf-8'):
 
-    invalid = False
-    # getting game ID
-    splitLine = bagLine.split(':')
+    numberOfMatching = 0
+
+    # getting winning numbers
+    splitLine = drawLine.split('|')
     idString = splitLine[0]
-    gameID = idString[5:]
+    winningNumbers = idString[10:]
+    winningNumbersArr = winningNumbers.strip().split(' ')
 
-    # each gameSplit is one bag, three rounds per bag
-    bagLine.strip()
-    gameSplitLine = bagLine[8:].split(';')
+    # all numbers drawn
+    drawnNums = splitLine[1]
+    drawnNumsArr = drawnNums.strip().split(' ')
 
-    redCount, blueCount, greenCount = 0, 0, 0
-    redMax, greenMax, blueMax = 0, 0, 0
-    for pullRound in gameSplitLine:
+    # checking for winning numbers
+    for drawn in drawnNumsArr:
 
-        # get each colors value
-        colorSplit = pullRound.split(',')
-        for pull in colorSplit:
-            # red count
-            if pull.__contains__("red"):
-                f = filter(str.isdecimal, pull)
-                pull = "".join(f)
-                redCount = int(pull)
+        if not drawn.isnumeric():
+            continue
+        for winner in winningNumbersArr:
+            if not winner.isnumeric():
+                continue
+            if drawn == winner and drawn is not (" " or "" or "\n" or "\t"):
+                numberOfMatching += 1
 
-                if redCount > redMax:
-                    redMax = redCount
+    # calculating points
+    if numberOfMatching > 0:
+        tempPoints = 2 ** (numberOfMatching - 1)
+        print(numberOfMatching, tempPoints, points)
+        points += tempPoints
+    lineNum += 1
+    print(lineNum)
 
-            # green count
-            elif pull.__contains__("green"):
-                f = filter(str.isdecimal, pull)
-                pull = "".join(f)
-                greenCount = int(pull)
-
-                if greenCount > greenMax:
-                    greenMax = greenCount
-
-            # blue count
-            elif pull.__contains__("blue"):
-                f = filter(str.isdecimal, pull)
-                pull = "".join(f)
-                blueCount = int(pull)
-
-                if blueCount > blueMax:
-                    blueMax = blueCount
-
-        # the game is not valid, and we move to the next game id
-        if redCount > maxRed or blueCount > maxBlue or greenCount > maxGreen:
-            print("invalid ID", gameID)
-            invalid = True
-
-    # getting power and power sum
-    power = redMax * greenMax * blueMax
-    powerSum += power
-
-    # made it through without finding faults, add to list
-    if not invalid:
-
-        validIDs.append(gameID)
-        print("valid ID --: ", gameID, "power: ", power)
-IDSum = 0
-for ID in validIDs:
-    IDSum += int(ID)
-
-print(IDSum)
-print("powerSum: ", powerSum)
+print(points)
