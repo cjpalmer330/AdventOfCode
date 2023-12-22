@@ -1,6 +1,6 @@
 import fileinput
 
-points, lineNum = 0, 0
+points, lineNum, totalMatching = 0, 0, 0
 for drawLine in fileinput.input(files='adventDay4Input.txt', encoding='utf-8'):
 
     numberOfMatching = 0
@@ -31,7 +31,9 @@ for drawLine in fileinput.input(files='adventDay4Input.txt', encoding='utf-8'):
         tempPoints = 2 ** (numberOfMatching - 1)
         print(numberOfMatching, tempPoints, points)
         points += tempPoints
+        totalMatching += numberOfMatching
     lineNum += 1
     print(lineNum)
 
 print(points)
+print(totalMatching)
